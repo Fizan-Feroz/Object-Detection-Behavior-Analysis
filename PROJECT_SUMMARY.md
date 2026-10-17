@@ -326,3 +326,32 @@ Phase 0 has been completed and verified across all criteria:
 - **Train/Tune/Test Protocol & Seed Logging**: Resolved Issues 6.8 and early-stopping contamination (`train_vit_lstm.py` implements track-grouped Tune splits, untouched Test evaluation, 5-seed mean $\pm$ sd, track-clustered bootstrap 95% CIs, and records every run to `results/experiments.csv`).
 - **Relative Paths & Config**: Resolved Issue 6.9 (`config.py` centralizes repository paths and reproducibility seed).
 - **Phase 0 Documentation**: Detailed report committed in `results/phase_0.md`.
+
+---
+
+## 8. Phase 1 Trustworthy Evaluation Resolution Summary
+
+Phase 1 has been completed and verified across all criteria:
+- **Blocked 5-Fold Cross-Validation Per Video**: Partitioned all 5 videos into 5 contiguous chronological blocks separated by $\ge 250$-frame guard intervals, purging boundary-crossing tracks ($<1.5\%$). Pooled out-of-fold test predictions across all 5 folds gave real, reliable support for rare classes (Defense: 44 test windows / 14 tracks; Washboarding: 34 test windows / 30 tracks).
+- **Multi-Seed Benchmark on Identical Folds (5 Seeds: 42, 43, 44, 45, 46)**:
+  - **Fused Model (Post: Proj $384 \to 64$ + Kin 7)**: Macro-F1 = **$0.5401 \pm 0.0126$**, Weighted-F1 = **$0.7708 \pm 0.0060$**, Accuracy = **$0.7665 \pm 0.0062$** (Seed 42 95% Bootstrap CI: $[0.5089, 0.6028]$).
+  - **Visual-Only (DINOv2 384)**: Macro-F1 = **$0.5327 \pm 0.0182$**, Weighted-F1 = **$0.7799 \pm 0.0154$**, Accuracy = **$0.7826 \pm 0.0168$** (Seed 42 95% Bootstrap CI: $[0.5000, 0.5988]$).
+  - **Kinematics Control (Pre Baseline)**: Macro-F1 = **$0.2512 \pm 0.0129$**, Weighted-F1 = **$0.6545 \pm 0.0140$**, Accuracy = **$0.6954 \pm 0.0157$** (Seed 42 95% Bootstrap CI: $[0.2234, 0.2812]$).
+- **Per-Class Support & F1**:
+  - Defense: $0.9054 \pm 0.0244$ (Support: 44 win / 14 trk).
+  - Fanning: $0.5274 \pm 0.0352$ (Support: 83 win / 31 trk).
+  - Washboarding: $0.4296 \pm 0.0426$ (Support: 34 win / 30 trk).
+  - Other: $0.8380 \pm 0.0058$ (Support: 465 win / 280 trk).
+  - Foraging: $0.0000 \pm 0.0000$ (Support: 7 win / 4 trk) — identified critical sample deficit for Phase 2.
+- **Leave-One-Video-Out (LOVO)**:
+  - Fanning cross-video generalization drops significantly: $0.2831 \pm 0.1647$ on `711a`, $0.1214 \pm 0.0692$ on `711b`, and $0.1460 \pm 0.1215$ on `yt5`.
+  - Defense (`20230609b-def` only) and Washboarding (`yt8` only) confirmed as single-video classes.
+- **Shortcut Diagnostics Suite**:
+  - **(a) Position-Only Classifier**: Macro-F1 = **$0.4451 \pm 0.0316$**, Accuracy = **$0.6667 \pm 0.0249$** (spatial coordinates alone provide strong behavioral cues).
+  - **(b) Background Patch Classifier (No Bee)**: Macro-F1 = **$0.8298 \pm 0.0605$**, Accuracy = **$0.9213 \pm 0.0273$** (proves extensive ambient background leakage across videos).
+  - **(c) Video ID Linear Probe**: Accuracy = **$100.0\% \pm 0.0\%$** (visual embeddings allow perfect video ID memorization).
+- **Documentation & Run Ledger**:
+  - All 90 experimental runs logged to `results/experiments.csv`.
+  - Benchmark summary saved to `results/phase_1_benchmark_summary.json`.
+  - Detailed report written in `results/phase_1.md`.
+
