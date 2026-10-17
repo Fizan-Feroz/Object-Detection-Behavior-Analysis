@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.cache/
+Datasets/
+dataset/
+downloads/
+dataset_yolo/
+videos/*.mp4
+videos/*.avi
+videos/*.mov
+!videos/.gitkeep
+runs/
+*.log
+dinov2_features/
