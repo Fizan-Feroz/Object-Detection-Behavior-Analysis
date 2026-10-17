@@ -378,4 +378,32 @@ Phase 2 has been completed and verified across all criteria:
   - Summary JSON saved to `results/phase_2_ablation_summary.json`.
   - Comprehensive writeup committed in `results/phase_2.md`.
 
+---
+
+## 10. Phase 3 Tracking & Full-Pipeline Skew Benchmark Summary
+
+Phase 3 transitions the system to realistic deployment and end-to-end evaluation:
+- **Detector Evaluation (Phase 3 Item 3)**:
+  - Evaluated baseline YOLOv8m (640px) vs 960px checkpoint exclusively on detector test split `_bee_20230711c` (514 images, 1,206 bee instances).
+  - Baseline 640px: Precision = $94.11\%$, Recall = $87.73\%$, mAP50 = $95.80\%$, Latency = $19.30$ ms, **FPS = 51.82 FPS** ($\ge 50$ fps real-time target).
+  - 960px Checkpoint: Precision = $98.53\%$, Recall = $94.40\%$ ($+6.68\%$), mAP50 = $97.52\%$, Latency = $33.45$ ms ($+14.15$ ms), **FPS = 29.90 FPS** ($-21.93$ FPS).
+  - Trade-off Conclusion: For real-time 50 fps live cameras, the 960px model does NOT justify the speed penalty ($29.9$ FPS $< 50$ FPS). For offline trajectory extraction, the $+6.68\%$ recall gain is strongly justified.
+- **Tracking Evaluation & ByteTrack Grid Search (Phase 3 Item 2)**:
+  - Ground-truth track bounding boxes verified as top-left normalized $[x_{tl}, y_{tl}, w, h]$.
+  - CLEAR MOT evaluation across 3,977 multi-behavior frames (`yt5`, `yt8`, `20230609b-def`, `20230711a-fan`).
+  - Baseline ByteTrack: MOTA = $0.0631$, IDF1 = $0.3986$, ID Switches = $1,007$.
+  - Winning Grid Search Configuration (`custom_bytetrack.yaml`): `new_track_thresh=0.30`, `track_buffer=15`, `track_low_thresh=0.15`, `match_thresh=0.70`.
+  - Achieved MOTA = **$0.1151$** (**$+82.4\%$ relative improvement** over default), IDF1 = **$0.3828$**, Composite Score = **$0.2490$** ($+0.0181$).
+- **Tracker Tracks Dataset & Train/Serve Skew (Phase 3 Item 1)**:
+  - Extracted tracker tracks with YOLOv8m + `custom_bytetrack.yaml`, mapped GT behavior labels via spatio-temporal IoU matching ($\ge 0.50$).
+  - GT Tracks Test Set: Macro-F1 = **$0.5289$**, Weighted-F1 = $0.8323$, Accuracy = $82.85\%$ (Support: 379 windows / 162 tracks).
+  - Tracker Tracks Test Set: Macro-F1 = **$0.4414$**, Weighted-F1 = $0.6556$, Accuracy = $66.10\%$ (Support: 2,189 windows / 147 tracks).
+  - Train/Serve Skew Drop: **$-0.0876$ Macro-F1** ($-16.6\%$ relative drop), 95% Bootstrap CI: $[0.4095, 0.5953]$.
+  - Per-class impact: Defense interaction windows increased to 89 with F1 = $0.9000$, Fanning retained F1 = $0.6888$ on 1,089 real serving windows, Washboarding dropped due to track fragmentation in dense clusters.
+- **Run Ledger & Artifacts**:
+  - `custom_bytetrack.yaml` created.
+  - JSON benchmarks saved: `results/detector_benchmark.json`, `results/tracking_benchmark.json`, `results/tracker_skew_benchmark.json`.
+  - Detailed report written in `results/phase_3.md`.
+  - Experiments 137–141 logged to `results/experiments.csv`.
+
 
