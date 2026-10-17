@@ -139,12 +139,17 @@ def run_pipeline(
         else:
             print(f"Warning: Checkpoint {lstm_path} not found. Running with uninitialized weights for testing.")
 
-    lstm = BeeLSTMClassifier(input_dim=in_dim, num_classes=len(CLASS_NAMES), bidirectional=True).to(device)
+    is_bidi = True
+    state_dict = None
     if lstm_path.exists():
         state_dict = torch.load(lstm_path, map_location=device)
+        is_bidi = "lstm.weight_ih_l0_reverse" in state_dict
+
+    lstm = BeeLSTMClassifier(input_dim=in_dim, num_classes=len(CLASS_NAMES), bidirectional=is_bidi).to(device)
+    if state_dict is not None:
         lstm.load_state_dict(state_dict)
     lstm.eval()
-    print(f"LSTM loaded successfully (Input dim: {in_dim}, Classes: {CLASS_NAMES}).\n")
+    print(f"LSTM loaded successfully (Input dim: {in_dim}, Bidirectional: {is_bidi}, Classes: {CLASS_NAMES}).\n")
 
     # 4. Open Video Stream
     cap = cv2.VideoCapture(str(video_path))
