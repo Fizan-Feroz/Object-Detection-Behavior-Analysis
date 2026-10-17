@@ -1,0 +1,156 @@
+{
+  "experiment_name": "Visual_Only_DINOv2",
+  "bidirectional": false,
+  "seeds": [
+    42
+  ],
+  "mean_test_macro_f1": 0.5154398001101088,
+  "sd_test_macro_f1": 0.0,
+  "mean_test_weighted_f1": 0.7660082149194013,
+  "sd_test_weighted_f1": 0.0,
+  "mean_test_accuracy": 0.7730870712401056,
+  "sd_test_accuracy": 0.0,
+  "per_class_f1": {
+    "Foraging": {
+      "mean": 0.0,
+      "sd": 0.0
+    },
+    "Defense": {
+      "mean": 0.6666666666666666,
+      "sd": 0.0
+    },
+    "Fanning": {
+      "mean": 0.7607843137254902,
+      "sd": 0.0
+    },
+    "Washboarding": {
+      "mean": 0.3333333333333333,
+      "sd": 0.0
+    },
+    "Other": {
+      "mean": 0.816414686825054,
+      "sd": 0.0
+    }
+  },
+  "seed_runs": [
+    {
+      "seed": 42,
+      "best_epoch": 8,
+      "tune_macro_f1": 0.5680924540493584,
+      "test_macro_f1": 0.5154398001101088,
+      "test_weighted_f1": 0.7660082149194013,
+      "test_accuracy": 0.7730870712401056,
+      "bootstrap_ci_95": {
+        "macro_f1": [
+          0.350715397316971,
+          0.7386967033179769
+        ],
+        "weighted_f1": [
+          0.6949398735639287,
+          0.8240690399642775
+        ],
+        "accuracy": [
+          0.7088506070023968,
+          0.8288159464475079
+        ]
+      },
+      "per_class_f1": {
+        "Foraging": 0.0,
+        "Defense": 0.6666666666666666,
+        "Fanning": 0.7607843137254902,
+        "Washboarding": 0.3333333333333333,
+        "Other": 0.816414686825054
+      },
+      "report": {
+        "Foraging": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 1.0
+        },
+        "Defense": {
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1-score": 0.6666666666666666,
+          "support": 1.0
+        },
+        "Fanning": {
+          "precision": 0.8083333333333333,
+          "recall": 0.7185185185185186,
+          "f1-score": 0.7607843137254902,
+          "support": 135.0
+        },
+        "Washboarding": {
+          "precision": 0.42857142857142855,
+          "recall": 0.2727272727272727,
+          "f1-score": 0.3333333333333333,
+          "support": 22.0
+        },
+        "Other": {
+          "precision": 0.7777777777777778,
+          "recall": 0.8590909090909091,
+          "f1-score": 0.816414686825054,
+          "support": 220.0
+        },
+        "accuracy": 0.7730870712401056,
+        "macro avg": {
+          "precision": 0.5029365079365079,
+          "recall": 0.5700673400673401,
+          "f1-score": 0.5154398001101088,
+          "support": 379.0
+        },
+        "weighted avg": {
+          "precision": 0.7656060225321438,
+          "recall": 0.7730870712401056,
+          "f1-score": 0.7660082149194013,
+          "support": 379.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          97,
+          0,
+          38
+        ],
+        [
+          0,
+          0,
+          0,
+          6,
+          16
+        ],
+        [
+          0,
+          1,
+          22,
+          8,
+          189
+        ]
+      ],
+      "support": {
+        "train_windows": 50873,
+        "train_tracks": 340,
+        "tune_windows": 16493,
+        "tune_tracks": 86,
+        "test_windows": 379,
+        "test_tracks": 162
+      }
+    }
+  ]
+}
