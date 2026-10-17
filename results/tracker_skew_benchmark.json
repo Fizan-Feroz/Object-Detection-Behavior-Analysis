@@ -1,0 +1,92 @@
+{
+  "tracker_config": {
+    "track_high_thresh": 0.25,
+    "track_low_thresh": 0.15,
+    "new_track_thresh": 0.3,
+    "track_buffer": 15,
+    "match_thresh": 0.7,
+    "fuse_score": true
+  },
+  "gt_tracks_benchmark": {
+    "windows": 379,
+    "tracks": 162,
+    "macro_f1": 0.528914783948341,
+    "weighted_f1": 0.8323276305780599,
+    "accuracy": 0.8284960422163589,
+    "per_class_f1": {
+      "Foraging": 0.0,
+      "Defense": 0.3333333333333333,
+      "Fanning": 0.8412698412698413,
+      "Washboarding": 0.6153846153846154,
+      "Other": 0.854586129753915
+    },
+    "support": {
+      "Foraging": 1,
+      "Defense": 1,
+      "Fanning": 135,
+      "Washboarding": 22,
+      "Other": 220
+    },
+    "bootstrap_ci_95": {
+      "macro_f1": [
+        0.4397508918865727,
+        0.8099718839071982
+      ],
+      "weighted_f1": [
+        0.7905879109274092,
+        0.8716283018475934
+      ],
+      "accuracy": [
+        0.7833218654434251,
+        0.8682732484205001
+      ]
+    }
+  },
+  "tracker_tracks_benchmark": {
+    "windows": 2189,
+    "tracks": 147,
+    "macro_f1": 0.4413537182612304,
+    "weighted_f1": 0.6556417689281346,
+    "accuracy": 0.6610324349017817,
+    "per_class_f1": {
+      "Foraging": 0.0,
+      "Defense": 0.9,
+      "Fanning": 0.6888489208633094,
+      "Washboarding": 0.0,
+      "Other": 0.6179196704428425
+    },
+    "support": {
+      "Foraging": 31,
+      "Defense": 89,
+      "Fanning": 1089,
+      "Washboarding": 1,
+      "Other": 979
+    },
+    "bootstrap_ci_95": {
+      "macro_f1": [
+        0.40949345609772464,
+        0.5953433182558929
+      ],
+      "weighted_f1": [
+        0.5928541713662724,
+        0.7188627262995438
+      ],
+      "accuracy": [
+        0.5977038456455662,
+        0.7210577564276718
+      ]
+    }
+  },
+  "train_serve_skew_drop": {
+    "delta_macro_f1": -0.08756106568711064,
+    "delta_weighted_f1": -0.17668586164992528,
+    "delta_accuracy": -0.1674636073145772,
+    "per_class_drop": {
+      "Foraging": 0.0,
+      "Defense": 0.5666666666666667,
+      "Fanning": -0.15242092040653188,
+      "Washboarding": -0.6153846153846154,
+      "Other": -0.23666645931107255
+    }
+  }
+}

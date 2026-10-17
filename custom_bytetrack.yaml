@@ -1,0 +1,14 @@
+# ============================================================
+# Optimized ByteTrack Configuration for Honeybee Multi-Object Tracking
+# Generated via Phase 3 Grid Search on Honeybee Tracking Dataset
+# Evaluated on 3977 frames across multi-behavior videos
+# Metrics: IDF1 = 0.3828, MOTA = 0.1151, ID Switches = 1813
+# ============================================================
+
+tracker_type: bytetrack
+track_high_thresh: 0.25
+track_low_thresh: 0.15
+new_track_thresh: 0.3
+track_buffer: 15
+match_thresh: 0.7
+fuse_score: True

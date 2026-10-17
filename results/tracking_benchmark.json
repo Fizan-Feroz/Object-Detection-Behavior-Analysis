@@ -1,0 +1,306 @@
+{
+  "evaluation_dataset": {
+    "videos": [
+      "yt5",
+      "yt8",
+      "20230609b-def",
+      "20230711a-fan"
+    ],
+    "total_frames_evaluated": 3977,
+    "detector_weights": "C:\\Users\\fizan\\OneDrive\\Documents\\BEECLASSIFICATION\\yolov8\\weights\\best.pt",
+    "imgsz": 640
+  },
+  "baseline_default_bytetrack": {
+    "config": {
+      "tracker_type": "bytetrack",
+      "track_high_thresh": 0.25,
+      "track_low_thresh": 0.1,
+      "new_track_thresh": 0.25,
+      "track_buffer": 30,
+      "match_thresh": 0.8,
+      "fuse_score": true
+    },
+    "mota": 0.06312923495796763,
+    "idf1": 0.3986157640908589,
+    "motp": 0.23450600782068598,
+    "idp": 0.38230080996532756,
+    "idr": 0.41638529753343745,
+    "num_switches": 1007,
+    "num_false_positives": 66198,
+    "num_misses": 54606,
+    "num_frames": 3977,
+    "eval_time_sec": 11.399489879608154,
+    "composite_score": 0.23087249952441327
+  },
+  "best_custom_bytetrack": {
+    "config": {
+      "tracker_type": "bytetrack",
+      "track_high_thresh": 0.25,
+      "track_low_thresh": 0.15,
+      "new_track_thresh": 0.3,
+      "track_buffer": 15,
+      "match_thresh": 0.7,
+      "fuse_score": true
+    },
+    "mota": 0.11510625370138206,
+    "idf1": 0.38284896095352344,
+    "motp": 0.23093022190266774,
+    "idp": 0.38527622652678145,
+    "idr": 0.3804520877717872,
+    "num_switches": 1813,
+    "num_false_positives": 55806,
+    "num_misses": 57434,
+    "num_frames": 3977,
+    "eval_time_sec": 10.153433561325073,
+    "composite_score": 0.24897760732745275
+  },
+  "delta": {
+    "idf1": -0.015766803137335472,
+    "mota": 0.05197701874341443,
+    "id_switches": 806,
+    "false_positives": -10392,
+    "misses": 2828
+  },
+  "top_10_configurations": [
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.3,
+        "track_buffer": 15,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11510625370138206,
+      "idf1": 0.38284896095352344,
+      "motp": 0.23093022190266774,
+      "idp": 0.38527622652678145,
+      "idr": 0.3804520877717872,
+      "num_switches": 1813,
+      "num_false_positives": 55806,
+      "num_misses": 57434,
+      "num_frames": 3977,
+      "eval_time_sec": 10.153433561325073,
+      "composite_score": 0.24897760732745275
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.3,
+        "track_buffer": 30,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11429867942377647,
+      "idf1": 0.38161675141625256,
+      "motp": 0.23103578019932208,
+      "idp": 0.3837431757734123,
+      "idr": 0.3795137633730455,
+      "num_switches": 1817,
+      "num_false_positives": 55954,
+      "num_misses": 57387,
+      "num_frames": 3977,
+      "eval_time_sec": 12.333757877349854,
+      "composite_score": 0.24795771542001452
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.2,
+        "track_buffer": 15,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.1112222059852791,
+      "idf1": 0.38245542277461153,
+      "motp": 0.2312623108725068,
+      "idp": 0.38376000867289256,
+      "idr": 0.3811596766626416,
+      "num_switches": 1875,
+      "num_false_positives": 56401,
+      "num_misses": 57282,
+      "num_frames": 3977,
+      "eval_time_sec": 19.394114017486572,
+      "composite_score": 0.24683881437994531
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.25,
+        "track_buffer": 15,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.1112222059852791,
+      "idf1": 0.38245542277461153,
+      "motp": 0.2312623108725068,
+      "idp": 0.38376000867289256,
+      "idr": 0.3811596766626416,
+      "num_switches": 1875,
+      "num_false_positives": 56401,
+      "num_misses": 57282,
+      "num_frames": 3977,
+      "eval_time_sec": 19.06320357322693,
+      "composite_score": 0.24683881437994531
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.3,
+        "track_buffer": 50,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.1134065021266123,
+      "idf1": 0.3802084742421841,
+      "motp": 0.23085452647784532,
+      "idp": 0.3821299274382759,
+      "idr": 0.3783062475484352,
+      "num_switches": 1849,
+      "num_false_positives": 56062,
+      "num_misses": 57363,
+      "num_frames": 3977,
+      "eval_time_sec": 14.770795345306396,
+      "composite_score": 0.2468074881843982
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.2,
+        "track_buffer": 15,
+        "match_thresh": 0.65,
+        "fuse_score": true
+      },
+      "mota": 0.1268045439512686,
+      "idf1": 0.36629616687802563,
+      "motp": 0.2297560524625908,
+      "idp": 0.37413580147896247,
+      "idr": 0.3587783323975727,
+      "num_switches": 2399,
+      "num_false_positives": 52898,
+      "num_misses": 58235,
+      "num_frames": 3977,
+      "eval_time_sec": 13.763020515441895,
+      "composite_score": 0.24655035541464712
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.25,
+        "track_buffer": 20,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11096839692660299,
+      "idf1": 0.38170883658849897,
+      "motp": 0.23137266452295382,
+      "idp": 0.3829038000154787,
+      "idr": 0.3805213084241534,
+      "num_switches": 1876,
+      "num_false_positives": 56453,
+      "num_misses": 57262,
+      "num_frames": 3977,
+      "eval_time_sec": 14.405094861984253,
+      "composite_score": 0.24633861675755098
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.2,
+        "track_buffer": 20,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11096839692660299,
+      "idf1": 0.38170883658849897,
+      "motp": 0.23137266452295382,
+      "idp": 0.3829038000154787,
+      "idr": 0.3805213084241534,
+      "num_switches": 1876,
+      "num_false_positives": 56453,
+      "num_misses": 57262,
+      "num_frames": 3977,
+      "eval_time_sec": 16.096415281295776,
+      "composite_score": 0.24633861675755098
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.2,
+        "track_buffer": 30,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11042232289126974,
+      "idf1": 0.3819024555774926,
+      "motp": 0.23130254203338388,
+      "idp": 0.38295091602285997,
+      "idr": 0.3808597205023881,
+      "num_switches": 1882,
+      "num_false_positives": 56535,
+      "num_misses": 57245,
+      "num_frames": 3977,
+      "eval_time_sec": 16.914299249649048,
+      "composite_score": 0.24616238923438116
+    },
+    {
+      "config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.15,
+        "new_track_thresh": 0.25,
+        "track_buffer": 30,
+        "match_thresh": 0.7,
+        "fuse_score": true
+      },
+      "mota": 0.11042232289126974,
+      "idf1": 0.3819024555774926,
+      "motp": 0.23130254203338388,
+      "idp": 0.38295091602285997,
+      "idr": 0.3808597205023881,
+      "num_switches": 1882,
+      "num_false_positives": 56535,
+      "num_misses": 57245,
+      "num_frames": 3977,
+      "eval_time_sec": 10.704193830490112,
+      "composite_score": 0.24616238923438116
+    }
+  ],
+  "parameter_ablation_summary": {
+    "new_track_thresh_sensitivity": {
+      "0.2": 0.38430329604481767,
+      "0.25": 0.3883811951641284,
+      "0.3": 0.38726241310734505
+    },
+    "track_buffer_sensitivity": {
+      "15": 0.3840096366142132,
+      "30": 0.39028528565412784,
+      "50": 0.3863144859148801
+    },
+    "track_low_thresh_sensitivity": {
+      "0.1": 0.3853495751177952,
+      "0.15": 0.3877163632334429
+    },
+    "match_thresh_sensitivity": {
+      "0.7": 0.3788581774040864,
+      "0.8": 0.3971601636690079
+    }
+  }
+}

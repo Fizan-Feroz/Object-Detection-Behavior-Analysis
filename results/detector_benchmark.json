@@ -1,0 +1,43 @@
+{
+  "dataset_session": "_bee_20230711c",
+  "test_images": 514,
+  "test_instances": 1206,
+  "baseline_640": {
+    "model_path": "C:\\Users\\fizan\\OneDrive\\Documents\\BEECLASSIFICATION\\yolov8\\weights\\best.pt",
+    "imgsz": 640,
+    "images": 514,
+    "instances": 1206,
+    "precision": 0.9411445970491105,
+    "recall": 0.8772802653399668,
+    "map50": 0.9580414970121064,
+    "map50_95": 0.7763816988667336,
+    "preprocess_ms": 2.7818498053742666,
+    "inference_ms": 14.683640466900842,
+    "postprocess_ms": 1.830488715911622,
+    "total_latency_ms": 19.29597898818673,
+    "fps": 51.824268704490926
+  },
+  "checkpoint_960": {
+    "model_path": "C:\\Users\\fizan\\OneDrive\\Documents\\BEECLASSIFICATION\\runs\\train\\yolov8m_960\\weights\\best.pt",
+    "imgsz": 960,
+    "images": 514,
+    "instances": 1206,
+    "precision": 0.9852877813748319,
+    "recall": 0.9440317986561313,
+    "map50": 0.97520833037666,
+    "map50_95": 0.7987165536016194,
+    "preprocess_ms": 11.381715564244649,
+    "inference_ms": 20.976080933806816,
+    "postprocess_ms": 1.0918963034853568,
+    "total_latency_ms": 33.44969280153682,
+    "fps": 29.895640774137565
+  },
+  "delta": {
+    "recall": 0.06675153331616446,
+    "map50": 0.017166833364553602,
+    "map50_95": 0.022334854734885834,
+    "fps_drop": 21.92862793035336,
+    "speedup_640_over_960": 1.73350586782952
+  },
+  "conclusion": "The 960px checkpoint improves Recall by +6.68% (from 87.73% to 94.40%) and mAP50 by +1.72%, but latency increases by +14.2ms per frame (19.3ms -> 33.4ms), causing FPS to drop from 51.8 FPS to 29.9 FPS. For real-time 50 FPS live deployment, the 960px checkpoint does NOT justify the speed penalty because 29.9 FPS < 50 FPS. However, for offline trajectory extraction, the +6.68% recall gain strongly justifies the computation."
+}
