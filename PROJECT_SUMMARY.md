@@ -355,3 +355,27 @@ Phase 1 has been completed and verified across all criteria:
   - Benchmark summary saved to `results/phase_1_benchmark_summary.json`.
   - Detailed report written in `results/phase_1.md`.
 
+---
+
+## 9. Phase 2 Foraging & Windows Resolution Summary
+
+Phase 2 has been completed and verified across all criteria:
+- **Root Cause Audit & Contiguous Run Lengths**:
+  - Across 1,842 raw Foraging tracks (3,142 bouts), **median bout length is 3.0 frames ($0.06$ s)** and **P90 length is 20.0 frames ($0.40$ s)** (max 525 frames).
+  - Requiring window span $T=16, K=6$ ($91$ frames continuous span / $1.82$ s) eliminates **$99.57\%$ of all Foraging tracks** ($1,842 \to 8$).
+  - Strict polygon containment (`all_inside`) drops 3 of the remaining 8 tracks, leaving only 5 tracks globally (and exactly 4 tracks in train).
+- **Systematic Factorial Ablation (9 Configs $\times$ 5 Seeds = 45 Runs)**:
+  - Evaluated $T \in \{16, 8, 6\}$ across gating rules `all_inside`, `half_inside`, `endpoint_inside` using Blocked 5-Fold Cross-Validation on identical folds.
+  - **$T=16$**: Macro-F1 = $0.2711 - 0.3058$, Foraging F1 $\le 0.0865$, Support: $\le 9$ windows ($\le 5$ tracks).
+  - **$T=8$**: Macro-F1 = $0.3576 - 0.3785$, Foraging F1 $= 0.4526 - 0.5130$, Support: $43 - 68$ windows ($35 - 57$ tracks).
+  - **$T=6$**: Macro-F1 = $0.3943 - \mathbf{0.3988}$, Foraging F1 $= 0.6584 - \mathbf{0.6785}$, Support: $143 - 193$ windows ($123 - 167$ tracks).
+- **Winning Configuration Selected by CIs**:
+  - **$T=6$, `half_inside` at $K=6$**: Achieves highest Accuracy ($0.7299 \pm 0.0071$) and Macro-F1 ($0.3988 \pm 0.0094$, Seed 42 95% Bootstrap CI: $[0.3720, 0.4252]$), with robust Foraging support (**182 test windows across 156 distinct tracks**) and Foraging F1 = **$0.6700 \pm 0.0195$**.
+- **Data Limitation Formally Documented**:
+  - Foraging is an acute transit behavior ($0.06 - 0.40$ s) that fundamentally cannot be detected using long observation horizons ($T=16, 1.82$ s) without severe track attrition. Short-window models ($T=6, 0.62$ s) are mandatory for forager detection.
+- **Run Ledger & Documentation**:
+  - All 45 ablation runs logged to `results/experiments.csv` (total logged runs in repo: 135).
+  - Summary JSON saved to `results/phase_2_ablation_summary.json`.
+  - Comprehensive writeup committed in `results/phase_2.md`.
+
+
