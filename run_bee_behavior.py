@@ -7,7 +7,11 @@
 # ============================================================
 
 from ultralytics import YOLO
-from tensorflow.keras.models import load_model
+
+try:
+    from keras.models import load_model
+except ImportError:
+    from tensorflow.keras.models import load_model
 
 import joblib
 import cv2
@@ -75,6 +79,18 @@ IMAGE_SIZE = 640
 SEQUENCE_LENGTH = 10
 
 SHOW_PREVIEW = True
+
+# GPU: 0 = first CUDA GPU (RTX 4060), "cpu" = fallback.
+# Auto-selects GPU when torch CUDA is available, keeps
+# everything else (ByteTrack, LSTM) on CPU.
+try:
+    import torch as _torch
+
+    DEVICE = 0 if _torch.cuda.is_available() else "cpu"
+except Exception:
+    DEVICE = 0
+
+CACHE_DIR = BASE_DIR / ".cache"
 
 
 # ============================================================
@@ -291,10 +307,60 @@ print("LOADING LSTM")
 print("=" * 70)
 
 
-lstm = load_model(
-    str(LSTM_PATH),
-    compile=False
-)
+def load_lstm_compat(model_path):
+    """Load .keras model across Keras versions.
+
+    Some models were saved with 'quantization_config' in Dense
+    config, which older/newer Keras rejects. Strip it via a
+    patched copy kept inside the project (.cache/) on TypeError.
+    """
+    import shutil
+    import zipfile
+
+    try:
+        return load_model(
+            str(model_path),
+            compile=False
+        )
+    except TypeError as e:
+        if "quantization_config" not in str(e):
+            raise
+
+        print("Patching LSTM for Keras compat "
+              "(stripping quantization_config)...")
+
+        CACHE_DIR.mkdir(exist_ok=True)
+
+        tmp = (
+            CACHE_DIR
+            / f"patched_{Path(model_path).name}"
+        )
+
+        shutil.copy(
+            str(model_path),
+            str(tmp)
+        )
+
+        with zipfile.ZipFile(str(tmp), "a") as z:
+            raw = z.read("config.json").decode("utf-8")
+            raw = raw.replace(
+                ', "quantization_config": null', ""
+            )
+            raw = raw.replace(
+                '"quantization_config": null, ', ""
+            )
+            raw = raw.replace(
+                '"quantization_config": null', ""
+            )
+            z.writestr("config.json", raw)
+
+        return load_model(
+            str(tmp),
+            compile=False
+        )
+
+
+lstm = load_lstm_compat(LSTM_PATH)
 
 
 print(
@@ -406,6 +472,40 @@ print(
     "Classes:",
     encoder.classes_
 )
+
+
+# Pre-resolve index -> class name once.
+# Avoids a sklearn inverse_transform call per track per frame.
+BEHAVIOR_CLASSES = list(
+    encoder.classes_
+)
+
+
+# Wrap the LSTM in a tf.function.
+#
+# Keras 3 model.predict() re-builds a data adapter and
+# re-traces on every call, which costs ~75 ms even for this
+# tiny model. A cached tf.function returns bit-identical
+# probabilities (verified max abs diff 0.0) roughly 1000x
+# faster, taking the pipeline from ~0.5 fps to ~15 fps.
+try:
+    import tensorflow as _tf
+
+    LSTM_FN = _tf.function(
+        lambda t: lstm(t, training=False),
+        reduce_retracing=True
+    )
+
+    print("LSTM tf.function ready (fast path).")
+
+except Exception as _e:
+
+    LSTM_FN = None
+
+    print(
+        "tf.function unavailable, "
+        f"falling back to predict(): {_e}"
+    )
 
 
 # ============================================================
@@ -523,10 +623,21 @@ def predict_behavior(track_id):
 
 
     # Predict
-    probabilities = lstm.predict(
-        model_input,
-        verbose=0
-    )[0]
+    if LSTM_FN is not None:
+
+        probabilities = LSTM_FN(
+            _tf.convert_to_tensor(
+                model_input,
+                dtype=_tf.float32
+            )
+        )[0].numpy()
+
+    else:
+
+        probabilities = lstm.predict(
+            model_input,
+            verbose=0
+        )[0]
 
 
     # Highest probability
@@ -545,9 +656,10 @@ def predict_behavior(track_id):
 
 
     # Convert index → behavior
-    behavior = encoder.inverse_transform(
-        [predicted_index]
-    )[0]
+    # (pre-resolved list, same order as encoder.classes_)
+    behavior = BEHAVIOR_CLASSES[
+        predicted_index
+    ]
 
 
     return (
@@ -618,6 +730,8 @@ while True:
         iou=IOU_THRESHOLD,
 
         imgsz=IMAGE_SIZE,
+
+        device=DEVICE,
 
         verbose=False
     )

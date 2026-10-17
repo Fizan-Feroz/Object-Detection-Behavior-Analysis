@@ -1,0 +1,12 @@
+ultralytics==8.4.177
+tensorflow==2.21.0
+keras==3.12.4
+opencv-python==5.0.0.93
+numpy==2.2.6
+joblib==1.6.0
+scikit-learn==1.7.2
+# GPU build (RTX 4060, CUDA 12.6) — keep in-project .venv
+# Install with: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+torch==2.14.1+cu126
+torchvision==0.29.1+cu126
+lap>=0.5.12

@@ -13,3 +13,9 @@ videos/*.mov
 runs/
 *.log
 dinov2_features/
+*.pt
+weights/
+vit_lstm_models/*.pt
+yolov8/
+LSTM WITH speed & distance/
+LSTM WITHOUT speed & distance/

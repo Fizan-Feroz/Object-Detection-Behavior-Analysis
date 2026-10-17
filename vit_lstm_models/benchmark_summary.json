@@ -1,0 +1,281 @@
+[
+  {
+    "exp_name": "Fused_DINOv2_Kinematics",
+    "best_macro_f1": 0.6364542212923866,
+    "report": {
+      "Foraging": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 1.0
+      },
+      "Defense": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1.0
+      },
+      "Fanning": {
+        "precision": 0.9174311926605505,
+        "recall": 0.7407407407407407,
+        "f1-score": 0.819672131147541,
+        "support": 135.0
+      },
+      "Washboarding": {
+        "precision": 0.42857142857142855,
+        "recall": 0.6818181818181818,
+        "f1-score": 0.5263157894736842,
+        "support": 22.0
+      },
+      "Other": {
+        "precision": 0.8146551724137931,
+        "recall": 0.8590909090909091,
+        "f1-score": 0.8362831858407079,
+        "support": 220.0
+      },
+      "accuracy": 0.8047493403693932,
+      "macro avg": {
+        "precision": 0.6321315587291545,
+        "recall": 0.6563299663299663,
+        "f1-score": 0.6364542212923866,
+        "support": 379.0
+      },
+      "weighted avg": {
+        "precision": 0.827192402028444,
+        "recall": 0.8047493403693932,
+        "f1-score": 0.8105989075416751,
+        "support": 379.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        100,
+        0,
+        35
+      ],
+      [
+        0,
+        0,
+        0,
+        15,
+        7
+      ],
+      [
+        2,
+        0,
+        9,
+        20,
+        189
+      ]
+    ],
+    "present_classes": [
+      "Foraging",
+      "Defense",
+      "Fanning",
+      "Washboarding",
+      "Other"
+    ]
+  },
+  {
+    "exp_name": "Visual_Only_DINOv2",
+    "best_macro_f1": 0.6485041528434625,
+    "report": {
+      "Foraging": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 1.0
+      },
+      "Defense": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1.0
+      },
+      "Fanning": {
+        "precision": 0.9203539823008849,
+        "recall": 0.7703703703703704,
+        "f1-score": 0.8387096774193549,
+        "support": 135.0
+      },
+      "Washboarding": {
+        "precision": 0.5,
+        "recall": 0.5909090909090909,
+        "f1-score": 0.5416666666666666,
+        "support": 22.0
+      },
+      "Other": {
+        "precision": 0.8312236286919831,
+        "recall": 0.8954545454545455,
+        "f1-score": 0.862144420131291,
+        "support": 220.0
+      },
+      "accuracy": 0.8311345646437994,
+      "macro avg": {
+        "precision": 0.6503155221985736,
+        "recall": 0.6513468013468013,
+        "f1-score": 0.6485041528434625,
+        "support": 379.0
+      },
+      "weighted avg": {
+        "precision": 0.8419973243347117,
+        "recall": 0.8311345646437994,
+        "f1-score": 0.8332829697814343,
+        "support": 379.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        104,
+        0,
+        31
+      ],
+      [
+        0,
+        0,
+        0,
+        13,
+        9
+      ],
+      [
+        2,
+        0,
+        8,
+        13,
+        197
+      ]
+    ],
+    "present_classes": [
+      "Foraging",
+      "Defense",
+      "Fanning",
+      "Washboarding",
+      "Other"
+    ]
+  },
+  {
+    "exp_name": "Kinematics_Only_Control",
+    "best_macro_f1": 0.45739431739431746,
+    "report": {
+      "Foraging": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 1.0
+      },
+      "Defense": {
+        "precision": 0.125,
+        "recall": 1.0,
+        "f1-score": 0.2222222222222222,
+        "support": 1.0
+      },
+      "Fanning": {
+        "precision": 0.8282828282828283,
+        "recall": 0.6074074074074074,
+        "f1-score": 0.7008547008547008,
+        "support": 135.0
+      },
+      "Washboarding": {
+        "precision": 0.4418604651162791,
+        "recall": 0.8636363636363636,
+        "f1-score": 0.5846153846153846,
+        "support": 22.0
+      },
+      "Other": {
+        "precision": 0.7723214285714286,
+        "recall": 0.7863636363636364,
+        "f1-score": 0.7792792792792793,
+        "support": 220.0
+      },
+      "accuracy": 0.7255936675461742,
+      "macro avg": {
+        "precision": 0.4334929443941071,
+        "recall": 0.6514814814814814,
+        "f1-score": 0.45739431739431746,
+        "support": 379.0
+      },
+      "weighted avg": {
+        "precision": 0.7693267185658424,
+        "recall": 0.7255936675461742,
+        "f1-score": 0.7365186985239756,
+        "support": 379.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        82,
+        1,
+        47
+      ],
+      [
+        0,
+        0,
+        0,
+        19,
+        3
+      ],
+      [
+        5,
+        2,
+        17,
+        23,
+        173
+      ]
+    ],
+    "present_classes": [
+      "Foraging",
+      "Defense",
+      "Fanning",
+      "Washboarding",
+      "Other"
+    ]
+  }
+]

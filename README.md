@@ -201,6 +201,28 @@ prepared_detection/
 
 ## Run
 
+### 1. DINOv2 ViT-S/14 + LSTM (Recommended — Visual Features)
+
+Uses DINOv2 vision transformer embeddings (384-d) with full GPU acceleration:
+
+```bash
+python run_bee_vit_lstm.py
+```
+
+Optional arguments:
+```bash
+# Run with fused features (visual + kinematics)
+python run_bee_vit_lstm.py --mode fused
+
+# Run on a different video file
+python run_bee_vit_lstm.py --video videos/20230609b-def.mp4
+
+# Save annotated video output
+python run_bee_vit_lstm.py --save-out videos/annotated_output.mp4
+```
+
+### 2. Baseline YOLOv8m + Kinematics LSTM (Legacy)
+
 ```bash
 python run_bee_behavior.py
 ```
@@ -217,19 +239,8 @@ Example:
 ID 21 | Fanning | 96.4%
 ```
 
-Press:
-
-```text
-Q
-```
-
-or
-
-```text
-ESC
-```
-
-to stop the preview.
+Press `Q` or `ESC` to stop the preview.
+Press `P` to pause/resume.
 
 ---
 
