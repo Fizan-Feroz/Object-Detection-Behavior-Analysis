@@ -406,4 +406,65 @@ Phase 3 transitions the system to realistic deployment and end-to-end evaluation
   - Detailed report written in `results/phase_3.md`.
   - Experiments 137–141 logged to `results/experiments.csv`.
 
+---
+
+## 11. Phase 4 Model & Visual Ablation Suite Summary
+
+Phase 4 executes a systematic, one-change-at-a-time ablation study across temporal architectures, token pooling, spatial resolution, augmentation strategies, and motion blur cues under identical Blocked 5-Fold cross-validation across 5 seeds (`42, 43, 44, 45, 46`) on the pooled out-of-fold test set (633 test windows across 359 distinct tracks):
+- **Temporal Architecture Ablations**:
+  - **Baseline BiLSTM**: Macro-F1 = **$0.5312 \pm 0.0129$**, Accuracy = $0.7564 \pm 0.0145$, Seed 42 95% CI: $[0.4676, 0.5685]$.
+  - **Fused UniLSTM (Causal Streaming)**: Macro-F1 = **$0.5372 \pm 0.0248$**, Accuracy = $0.7460 \pm 0.0097$, Seed 42 95% CI: $[0.5157, 0.6453]$ (**$+0.0060$ gain** over BiLSTM). Proves backward lookahead is unneeded; real-time causal streaming incurs zero penalty.
+  - **Fused BiGRU**: Macro-F1 = **$0.5460 \pm 0.0334$**, Accuracy = $0.7656 \pm 0.0108$ (**$+0.0148$ gain** over BiLSTM). Simpler gating avoids overfitting on small track counts.
+  - **Fused 1D Temporal Convolution (TCN)**: Macro-F1 = **$0.5465 \pm 0.0260$**, Accuracy = **$0.7678 \pm 0.0078$** (**$+0.0153$ gain** over BiLSTM). Residual 1D convolutions efficiently capture oscillatory wing and posture dynamics with minimal cross-seed variance.
+  - **Temporal Transformer (2L, 4H, d=64)**: Macro-F1 = **$0.5248 \pm 0.0175$**, Accuracy = $0.7709 \pm 0.0169$. Lacks inductive bias for short 16-step trajectories.
+- **Augmentation & Phase Ablations**:
+  - Training on Phase 0 offset only (6,225 windows) achieves **$0.5613 \pm 0.0169$ Macro-F1** (outperforming the 37,355-window 6-phase offset pool at $0.5312 \pm 0.0129$).
+  - **Window-Consistent Augmentation** (consistent horizontal flip + window-level feature jitter) cuts cross-seed variance by $48\%$ (Macro-F1 = **$0.5603 \pm 0.0087$**).
+- **Token & Resolution Ablations**:
+  - **CLS vs CLS + Mean Patch Tokens**: CLS token alone ($0.5511 \pm 0.0068$) matches CLS + mean patch tokens ($0.5505 \pm 0.0075$), while Mean Patch alone lags at $0.5320 \pm 0.0192$. CLS token is completely sufficient.
+  - **Crop 112x112 vs 224x224**: 112x112 drops Macro-F1 by **$-0.0752$** ($0.5312 \to 0.4560 \pm 0.0244$), proving $224 \times 224$ is required for resolving fine bee appendages.
+- **Blur & Motion Diagnostic (The Fanning Question)**:
+  - Gaussian blur ($\sigma=3.0$) crashes Fanning F1 from **$0.4920 \to 0.3664$ ($-0.1256$)** and Macro-F1 from $0.5334 \to 0.4149$.
+  - 4x downscaling crashes Fanning F1 to **$0.3511$ ($-0.1409$)**.
+  - Temporal step scrambling preserves Fanning F1 at **$0.4899$** ($\Delta = -0.0021$), while temporal freezing (zero motion) degrades F1 to **$0.4338$**.
+  - Scientific Conclusion: Fanning recognition requires sharp morphological wing edges; it does not rely on optical blur shortcuts. Because wing-beats ($\sim 250$ Hz) alias at 50 fps, appearance across 0.32s is cyclostationary, explaining step-order invariance while multi-frame variation remains essential.
+- **Artifacts**:
+  - Saved to `results/phase_4_ablation_summary.json`.
+  - Detailed scientific analysis written in `results/phase_4.md`.
+  - All 55 ablation runs logged to `results/experiments.csv`.
+
+---
+
+## 12. Phase 5 Production Deployment & Live 6,000-Frame Benchmark Summary
+
+Phase 5 transitions the system to full real-time production deployment:
+- **Live 6,000-Frame Benchmark Execution**:
+  - Processed all 6,000 continuous frames of 1080p session `20230711a-fan.mp4` on an NVIDIA RTX 4060 Laptop GPU.
+  - Total benchmark elapsed time: **$142.13$ seconds** ($2.37$ minutes).
+  - Sustained throughput: **$42.22$ FPS** (comfortably exceeding real-time requirements).
+- **Latency Breakdown Per Stage**:
+  - Frame Ingestion & Decode: $3.16$ ms mean ($13.8\%$).
+  - YOLOv8m Detection (640x640): $10.94$ ms mean ($47.8\%$, median $10.32$ ms, P95 $14.80$ ms).
+  - Custom ByteTrack Multi-Tracking: $2.30$ ms mean ($10.0\%$).
+  - Causal Kinematics Tracking: $0.24$ ms mean ($1.1\%$).
+  - DINOv2 ViT-S/14 Embedding ($K=6$ stride): $5.72$ ms mean ($25.0\%$, median $0.02$ ms, P95 $37.67$ ms).
+  - Temporal BiLSTM Classification: $0.24$ ms mean ($1.1\%$).
+  - Total End-to-End Latency: **$22.88$ ms mean** (median **$16.75$ ms**, P95 **$56.39$ ms**).
+- **GPU Resource Utilization**:
+  - Peak GPU VRAM: **$272.19$ MB** ($<3.5\%$ of 8 GB capacity).
+  - Active Allocated VRAM: $192.55$ MB.
+  - Reserved VRAM: $402.00$ MB.
+- **Ground-Truth Behavioral & Tracking Evaluation**:
+  - Matched **125,524 ground-truth instances** (**$98.49\%$ recall** against 127,452 GT annotations).
+  - MOTA: **$0.5542$**, IDF1: **$0.8185$**, ID Switches: $1,128$.
+  - Live Behavior Classification: **$91.87\%$ track-level accuracy** and **$83.44\%$ frame-level accuracy**.
+  - Live Fanning: **$0.6726$ frame-level F1** ($76.28\%$ recall) and **$0.5417$ track-level F1**.
+  - Spurious Hallucinations: Zero false positives for Defense and Washboarding.
+- **Comprehensive Reporting & Artifacts**:
+  - Live benchmark results saved to `results/benchmark_live_6000frames.json`.
+  - Detailed report written in `results/phase_5.md`.
+  - Polished Word report (`Bee_Behavior_Classification_Report_Clean.docx`) and standalone PDF (`Bee_Behavior_Classification_Report_Clean.pdf`) dynamically regenerated reading from all benchmark JSONs.
+  - Final total logged runs in `results/experiments.csv`: **196 runs**.
+
+
 

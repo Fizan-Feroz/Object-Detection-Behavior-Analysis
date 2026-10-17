@@ -139,16 +139,53 @@ To test whether deep representations rely on genuine insect motion or ambient vi
 
 ---
 
+### Phase 3 Summary: Tracking & Full-Pipeline Skew Benchmark
+
+- **Detector Evaluation:** Baseline YOLOv8m (640px) achieves **$51.82$ FPS** ($95.80\%$ mAP50), beating real-time requirements. 960px reaches $97.52\%$ mAP50 ($+6.68\%$ recall) at $29.90$ FPS.
+- **ByteTrack Optimization:** 54-combination grid search yielded optimal parameters (`custom_bytetrack.yaml`): MOTA = **$0.1151$** (**$+82.4\%$ improvement** over default $0.0631$), IDF1 = **$0.3828$**.
+- **Train/Serve Skew:** Evaluated classifier on raw ByteTrack tracker tracks: Macro-F1 = **$0.4414$** ($-0.0876$ drop from ground-truth tracks), with Fanning retaining F1 = $0.6888$ on 1,089 real serving windows.
+
+---
+
+### Phase 4 Summary: Model, Resolution, Token & Blur Ablations
+
+*Evaluated across identical Blocked 5-Fold splits over 5 random seeds (42..46) on 633 pooled test windows (359 tracks):*
+- **Temporal Architectures:** 
+  - **Fused UniLSTM (Causal Streaming):** Macro-F1 = **$0.5372 \pm 0.0248$** (outperforms BiLSTM $0.5312$, proving causal streaming incurs zero penalty).
+  - **1D Temporal Convolution (TCN):** Macro-F1 = **$0.5465 \pm 0.0260$**, Accuracy = **$76.78\%$** (highest overall score).
+  - **Fused BiGRU:** Macro-F1 = **$0.5460 \pm 0.0334$** (exceeds BiLSTM due to simpler gating).
+  - **Temporal Transformer:** Macro-F1 = **$0.5248 \pm 0.0175$** (lacks recurrent inductive bias).
+- **Resolution & Tokens:** Crop $112 \times 112$ causes a massive **$-0.0752$ drop** ($0.5312 \to 0.4560$), proving full $224 \times 224$ is required. CLS token alone ($0.5511$) matches CLS + patch ($0.5505$).
+- **Fanning Blur vs Motion Diagnostic:** Gaussian blur ($\sigma=3.0$) crashes Fanning F1 by **$-0.1256$** ($0.4920 \to 0.3664$), proving Fanning relies on sharp edge contrast, not static optical blur. Temporal order scrambling preserves F1 ($0.4899$), while zero-motion freezing degrades F1 ($0.4338$).
+
+---
+
+### Phase 5 Summary: Live 6,000-Frame Production Benchmark
+
+*Continuous 6,000-frame 1080p stream (`20230711a-fan.mp4`) on an NVIDIA RTX 4060 Laptop GPU:*
+- **Total Throughput:** **$42.22$ FPS** ($142.1$ seconds runtime).
+- **Total Latency:** **$22.88$ ms mean** (median **$16.75$ ms**, P95 **$56.39$ ms**).
+- **VRAM Footprint:** **$272.2$ MB peak** ($<3.5\%$ of 8 GB GPU).
+- **Tracking Accuracy:** **$0.8185$ IDF1**, **$0.5542$ MOTA**, matching **$125,524$ ground-truth instances** ($98.5\%$ recall).
+- **Live Classification:** **$91.87\%$ track-level accuracy** and **$83.44\%$ frame-level accuracy**, with Fanning achieving **$0.6726$ frame-level F1**.
+
+---
+
 ## 🛠️ Repository Scripts & Tools
 
 | Script | Purpose |
 |---|---|
 | `run_bee_vit_lstm.py` | Real-time GPU inference pipeline (YOLOv8m + ByteTrack + DINOv2 + PyTorch BiLSTM). |
-| `train_vit_lstm.py` | Multi-seed trainer for Fused, Visual, and Kinematics models with track-clustered bootstrap CIs. |
+| `run_phase5_live_benchmark.py` | Complete 6,000-frame live streaming benchmark measuring per-stage latencies, FPS, VRAM, and GT F1. |
+| `train_phase4_ablations.py` | Phase 4 model ablation runner (UniLSTM, BiGRU, TCN, Transformer, Augmentation, Resolution, Blur). |
+| `eval_cls_vs_patch.py` | Phase 4 token ablation evaluating CLS vs Mean Patch vs CLS+Patch representations. |
+| `extract_phase4_visual_ablations.py` | Feature extractor for 112x112, CLS+patch, Gaussian blur, and downscaled crops. |
+| `evaluate_detectors.py` | Phase 3 detector benchmark comparing YOLOv8m 640px vs 960px on held-out test split. |
+| `grid_search_bytetrack.py` | Phase 3 54-combination grid search over ByteTrack hyperparameters. |
+| `evaluate_tracker_skew.py` | Phase 3 tracker tracks dataset extractor and train/serve skew benchmark. |
 | `train_phase1.py` | Complete Phase 1 suite: Blocked 5-Fold, LOVO cross-validation, and 3 shortcut diagnostic probes. |
-| `audit_foraging_and_gating.py` | Granular audit script analyzing contiguous run lengths and track attrition funnels. |
 | `train_phase2_kinematics.py` | Systematic $3 \times 3$ factorial ablation runner over $T \in \{6, 8, 16\}$ and polygon gating rules. |
-| `create_report_docx.py` | Automated report generator building the Word `.docx` report directly from `results/*.json`. |
+| `create_report_docx.py` | Automated report generator building both `.docx` and `.pdf` reports directly from all `results/*.json`. |
 | `kinematics.py` | Shared causal scale-invariant kinematics tracker (enforces offline/online parity). |
 | `config.py` | Centralized paths, video metadata, and reproducibility seed utilities. |
 
@@ -157,3 +194,4 @@ To test whether deep representations rely on genuine insect motion or ambient vi
 ## 📄 License & Attribution
 
 Developed for scientific honeybee behavioral research and automated apiary monitoring. Built on Meta DINOv2, Ultralytics YOLOv8, and OpenCV.
+

@@ -19,3 +19,5 @@ vit_lstm_models/*.pt
 yolov8/
 LSTM WITH speed & distance/
 LSTM WITHOUT speed & distance/
+results/detection_cache/
+
