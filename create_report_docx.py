@@ -201,8 +201,8 @@ def create_document():
 
     b5_dict = p1_data.get("blocked_5fold", {})
     for mkey, mname in [
-        ("kinematics", "Kinematics Control (Pre)"),
-        ("visual", "Visual-Only DINOv2"),
+        ("kinematics_control", "Kinematics Control (Pre)"),
+        ("visual_only", "Visual-Only DINOv2"),
         ("fused_proj", "Fused BiLSTM (Post)"),
     ]:
         minfo = b5_dict.get(mkey, {})
