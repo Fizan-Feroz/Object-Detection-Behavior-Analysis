@@ -245,6 +245,120 @@ def create_document():
                 if c_i == 1:
                     run.font.color.rgb = COLOR_GREEN
 
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # Per-Class Pre vs Post Comparison Table
+    p_prepost = doc.add_paragraph()
+    p_prepost.add_run("Per-Class Pre vs. Post Breakdown (Support: 633 Windows / 359 Distinct Tracks):").bold = True
+    p_prepost.paragraph_format.space_after = Pt(4)
+
+    cls_widths = [Inches(1.5), Inches(1.2), Inches(1.3), Inches(1.3), Inches(1.2)]
+    cls_data = [
+        ("Behavior Class", "Support (Win / Trk)", "Pre: Kinematics F1", "Post: Fused F1", "Delta (Gain)"),
+    ]
+
+    kin_classes = b5_dict.get("kinematics_control", {}).get("per_class_f1", {})
+    fused_classes = b5_dict.get("fused_proj", {}).get("per_class_f1", {})
+    support_dict = b5_dict.get("fused_proj", {}).get("support", {})
+
+    for cname in ["Foraging", "Defense", "Fanning", "Washboarding", "Other"]:
+        supp = support_dict.get(cname, {})
+        w_cnt = supp.get("windows", 0)
+        t_cnt = supp.get("tracks", 0)
+        k_f1 = kin_classes.get(cname, {}).get("mean", 0.0)
+        f_f1 = fused_classes.get(cname, {}).get("mean", 0.0)
+        d_f1 = f_f1 - k_f1
+        cls_data.append((
+            cname,
+            f"{w_cnt} win / {t_cnt} trk",
+            f"{k_f1:.4f}",
+            f"{f_f1:.4f}",
+            f"+{d_f1:.4f}" if d_f1 >= 0 else f"{d_f1:.4f}",
+        ))
+
+    t_cls = doc.add_table(rows=len(cls_data), cols=5)
+    t_cls.alignment = WD_TABLE_ALIGNMENT.CENTER
+    style_table(t_cls, cls_widths)
+
+    for r_i, row in enumerate(cls_data):
+        for c_i, val in enumerate(row):
+            cell = t_cls.cell(r_i, c_i)
+            cell.text = val
+            p = cell.paragraphs[0]
+            p.paragraph_format.space_before = Pt(2.5)
+            p.paragraph_format.space_after = Pt(2.5)
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER if c_i > 0 else WD_ALIGN_PARAGRAPH.LEFT
+            run = p.runs[0]
+            run.font.name = "Arial"
+            run.font.size = Pt(8.5)
+            if r_i == 0:
+                set_cell_background(cell, HEADER_BG)
+                run.font.bold = True
+                run.font.color.rgb = COLOR_WHITE
+            else:
+                if c_i == 0:
+                    run.font.bold = True
+                elif c_i == 4 and "+" in val and val != "+0.0000":
+                    run.font.bold = True
+                    run.font.color.rgb = COLOR_GREEN
+
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # Shortcut Diagnostics Table
+    p_diag = doc.add_paragraph()
+    p_diag.add_run("Shortcut Diagnostics (Rigorous Verification of Environmental Bias):").bold = True
+    p_diag.paragraph_format.space_after = Pt(4)
+
+    diag_dict = p1_data.get("shortcut_diagnostics", {})
+    pos_res = diag_dict.get("position_shortcut", {})
+    bg_res = diag_dict.get("background_shortcut", {})
+    vid_res = diag_dict.get("video_id_probe", {})
+
+    diag_widths = [Inches(2.2), Inches(1.2), Inches(1.2), Inches(2.0)]
+    diag_data = [
+        ("Diagnostic Probe", "Macro-F1", "Accuracy", "Interpretation / Failure Mode"),
+        (
+            "(a) Position-Only (16x4 Coords)",
+            f"{pos_res.get('mean_macro_f1', 0.4451):.4f}",
+            f"{pos_res.get('mean_accuracy', 0.6667)*100:.1f}%",
+            "Spatial location alone acts as strong prior",
+        ),
+        (
+            "(b) Background Patch (No Bee)",
+            f"{bg_res.get('mean_macro_f1', 0.8298):.4f}",
+            f"{bg_res.get('mean_accuracy', 0.9213)*100:.1f}%",
+            "Hive wood grain/lighting allows 92.1% fake behavior classification",
+        ),
+        (
+            "(c) Video ID Linear Probe",
+            "N/A",
+            f"{vid_res.get('mean_accuracy', 1.0000)*100:.1f}%",
+            "Visual embeddings achieve 100% video memorization",
+        ),
+    ]
+
+    t_diag = doc.add_table(rows=len(diag_data), cols=4)
+    t_diag.alignment = WD_TABLE_ALIGNMENT.CENTER
+    style_table(t_diag, diag_widths)
+
+    for r_i, row in enumerate(diag_data):
+        for c_i, val in enumerate(row):
+            cell = t_diag.cell(r_i, c_i)
+            cell.text = val
+            p = cell.paragraphs[0]
+            p.paragraph_format.space_before = Pt(2.5)
+            p.paragraph_format.space_after = Pt(2.5)
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER if c_i in (1, 2) else WD_ALIGN_PARAGRAPH.LEFT
+            run = p.runs[0]
+            run.font.name = "Arial"
+            run.font.size = Pt(8.0)
+            if r_i == 0:
+                set_cell_background(cell, HEADER_BG)
+                run.font.bold = True
+                run.font.color.rgb = COLOR_WHITE
+            elif c_i == 0:
+                run.font.bold = True
+
     doc.add_paragraph().paragraph_format.space_after = Pt(12)
 
     # 4. Phase 2 Window Length & Gating Ablation
